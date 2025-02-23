@@ -1,0 +1,150 @@
+version: 2.1
+
+orbs:
+  codecov: codecov/codecov@5.2.1
+  # node: circleci/node@7.1.0
+
+executors:
+  go-container:
+    docker:
+      - image: cimg/go:1.24
+  docker-container:
+    docker:
+      - image: cimg/base:stable
+
+jobs:
+  # Cache Go modules to speed up builds.
+  cache-dependencies:
+    executor: go-container
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - go-mod-cache-{{ checksum "go.sum" }}
+      - run:
+          name: Download dependencies
+          command: go mod download
+      - save_cache:
+          paths:
+            - go/pkg/mod
+          key: go-mod-cache-{{ checksum "go.sum" }}
+
+  # Run all Go tests and upload coverage to Codecov
+  go-test:
+    executor: go-container
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - go-mod-cache-{{ checksum "go.sum" }}
+      - run:
+          name: Run all tests with coverage
+          command: go test -v ./... -coverprofile=coverage.out -covermode=atomic
+      - run:
+          name: Display coverage report
+          command: go tool cover -func=coverage.out
+      - codecov/upload
+
+  # Run Go linting.
+  go-lint:
+    executor: go-container
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - go-mod-cache-{{ checksum "go.sum" }}
+      - run:
+          name: Install golangci-lint
+          command: go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+      - run:
+          name: Run golangci-lint
+          command: golangci-lint run
+
+  # Job to build Docker image for the main branch
+  docker-build-main:
+    executor: docker-container
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Log in to GHCR
+          command: echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USERNAME" --password-stdin
+      - run:
+          name: Build Docker image
+          command: docker build -t ghcr.io/xmoelletschi/renoglaab:${CIRCLE_SHA1} .
+      - run:
+          name: Push Docker image as 'latest'
+          command: |
+            docker tag ghcr.io/xmoelletschi/renoglaab:${CIRCLE_SHA1} ghcr.io/xmoelletschi/renoglaab:latest
+            docker push ghcr.io/xmoelletschi/renoglaab:${CIRCLE_SHA1}
+            docker push ghcr.io/xmoelletschi/renoglaab:latest
+
+  # # Job to run semantic release
+  # semantic-release:
+  #   executor: node/default
+  #   steps:
+  #     - checkout
+  #     - node/install-packages
+  #     - run: npx semantic-release
+
+  # Job to build Docker image for tags
+  docker-build-tag:
+    executor: docker-container
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Log in to GHCR
+          command: echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USERNAME" --password-stdin
+      - run:
+          name: Build Docker image
+          command: docker build -t ghcr.io/xmoelletschi/renoglaab:${CIRCLE_TAG} .
+      - run:
+          name: Push Docker image with Tag
+          command: |
+            docker push ghcr.io/xmoelletschi/renoglaab:${CIRCLE_TAG}
+
+workflows:
+  # Workflow for Pull Requests: Runs Tests & Linting
+  run-go-tests:
+    jobs:
+      - cache-dependencies:
+          filters:
+            branches:
+              ignore: master
+            tags:
+              ignore: /.*/
+      - go-lint:
+          requires:
+            - cache-dependencies
+      - go-test:
+          requires:
+            - cache-dependencies
+
+  # Workflow for `master`: Runs Build & Release
+  build-and-release:
+    jobs:
+      - docker-build-main:
+          filters:
+            branches:
+              only: master
+            tags:
+              ignore: /.*/
+      # - semantic-release:
+      #     requires:
+      #       - docker-build-main
+      #     filters:
+      #       branches:
+      #         only: master
+      #       tags:
+      #         ignore: /.*/
+
+  # Workflow for Tags: Runs Docker Build with Tags
+  tag-build:
+    jobs:
+      - docker-build-tag:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v[0-9]+(\.[0-9]+)*$/

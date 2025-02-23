@@ -1,0 +1,31 @@
+linters:
+  enable-all: true
+  disable:
+    - typecheck
+    - exhaustruct
+    - varnamelen
+    - wrapcheck
+    - testpackage
+    - gofumpt
+
+linters-settings:
+  depguard:
+    rules:
+      main:
+        allow:
+          - $gostd
+          - github.com/xMoelletschi/renoglaab/internal
+          - gitlab.com/gitlab-org/api/client-go
+          - github.com/sirupsen/logrus
+          - github.com/stretchr/testify/assert
+          - github.com/stretchr/testify/mock
+          - github.com/stretchr/testify/require
+      packages:
+        allow:
+          - $gostd
+          - github.com/xMoelletschi/renoglaab/internal
+          - gitlab.com/gitlab-org/api/client-go
+          - github.com/sirupsen/logrus
+          - github.com/stretchr/testify/assert
+          - github.com/stretchr/testify/mock
+          - github.com/stretchr/testify/require
