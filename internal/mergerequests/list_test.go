@@ -56,10 +56,11 @@ func TestListProjectMergeRequests(t *testing.T) {
 	repo := "test/repo"
 	config := config.Config{
 		Labels:                    []string{"ops", "renovate"},
-		AllowedBranchRegex:        regexp.MustCompile(`^feature/branch\d+$`),
+		AllowedBranchRegex:        `^feature/branch\d+$`,
 		FilterByBranch:            true,
 		FilterBySucceededPipeline: true,
 	}
+	config.AllowedBranchRegexCompiled = regexp.MustCompile(config.AllowedBranchRegex)
 
 	tests := []struct {
 		name      string

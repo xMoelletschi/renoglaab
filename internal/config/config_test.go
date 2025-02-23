@@ -28,7 +28,7 @@ func TestNewConfig(t *testing.T) {
 	assert.Equal(t, "Approving merge request! :ship:", config.Comment, "ApproveComment does not match'")
 	assert.Equal(t, "glpat-dafsgretegsfaf", config.GitLabAPIToken, "GitLabAPIToken does not match")
 	assert.Equal(t, "https://test.gitlab.com", config.GitLabURL, "GitLabURL does not match")
-	assert.Equal(t, regexp.MustCompile(defaultBranchRegex).String(), config.AllowedBranchRegex.String(), "AllowedBranchRegex does not match")
+	assert.Equal(t, regexp.MustCompile(defaultBranchRegex).String(), config.AllowedBranchRegexCompiled.String(), "AllowedBranchRegex does not match")
 	assert.Equal(t, logrus.WarnLevel, config.LogLevel)
 }
 
