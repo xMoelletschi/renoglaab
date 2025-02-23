@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   codecov: codecov/codecov@5.2.1
-  # node: circleci/node@7.1.0
+  node: circleci/node@7.1.0
 
 executors:
   go-container:
@@ -79,13 +79,13 @@ jobs:
             docker push ghcr.io/xmoelletschi/renoglaab:${CIRCLE_SHA1}
             docker push ghcr.io/xmoelletschi/renoglaab:latest
 
-  # # Job to run semantic release
-  # semantic-release:
-  #   executor: node/default
-  #   steps:
-  #     - checkout
-  #     - node/install-packages
-  #     - run: npx semantic-release
+  # Job to run semantic release
+  semantic-release:
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages
+      - run: npx semantic-release
 
   # Job to build Docker image for tags
   docker-build-tag:
@@ -130,14 +130,14 @@ workflows:
               only: master
             tags:
               ignore: /.*/
-      # - semantic-release:
-      #     requires:
-      #       - docker-build-main
-      #     filters:
-      #       branches:
-      #         only: master
-      #       tags:
-      #         ignore: /.*/
+      - semantic-release:
+          requires:
+            - docker-build-main
+          filters:
+            branches:
+              only: master
+            tags:
+              ignore: /.*/
 
   # Workflow for Tags: Runs Docker Build with Tags
   tag-build:
