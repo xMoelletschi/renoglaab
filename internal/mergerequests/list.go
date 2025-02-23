@@ -48,7 +48,7 @@ func shouldProcessMR(repo string, mr *gitlab.MergeRequest, config config.Config,
 	}).Debug("Checking")
 
 	if config.FilterByBranch {
-		if !config.AllowedBranchRegex.MatchString(mr.SourceBranch) {
+		if !config.AllowedBranchRegexCompiled.MatchString(mr.SourceBranch) {
 			logrus.WithFields(logrus.Fields{
 				"repository": repo, "mr_id": mr.IID, "branch": mr.SourceBranch, "title": mr.Title,
 			}).Debug("Branch does not match allowed regex")

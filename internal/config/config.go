@@ -19,7 +19,8 @@ type Config struct {
 	FilterByLabels                  bool
 	Labels                          []string
 	FilterByBranch                  bool
-	AllowedBranchRegex              *regexp.Regexp
+	AllowedBranchRegex              string
+	AllowedBranchRegexCompiled      *regexp.Regexp
 	FilterBySucceededPipeline       bool
 	FilterByPipelineWithoutWarnings bool
 	AddComment                      bool
@@ -38,7 +39,7 @@ func getDefaultConfig() Config {
 		FilterByLabels:                  true,
 		Labels:                          []string{"renovate"},
 		FilterByBranch:                  true,
-		AllowedBranchRegex:              regexp.MustCompile(`^renovate/automerge$`),
+		AllowedBranchRegex:              `renovate/automerge`,
 		FilterBySucceededPipeline:       true,
 		FilterByPipelineWithoutWarnings: true,
 		AddComment:                      true,
@@ -59,7 +60,8 @@ func NewConfig() *Config {
 	cfg.FilterByLabels = getEnvAsBool("FILTER_BY_LABELS", cfg.FilterByLabels)
 	cfg.Labels = getEnvAsSlice("LABELS", strings.Join(cfg.Labels, ","))
 	cfg.FilterByBranch = getEnvAsBool("FILTER_BY_BRANCH", cfg.FilterByBranch)
-	cfg.AllowedBranchRegex = mustCompileRegex(getEnv("ALLOWED_BRANCH_REGEX", cfg.AllowedBranchRegex.String()))
+	cfg.AllowedBranchRegex = getEnv("ALLOWED_BRANCH_REGEX", cfg.AllowedBranchRegex)
+	cfg.AllowedBranchRegexCompiled = mustCompileRegex(cfg.AllowedBranchRegex)
 	cfg.FilterBySucceededPipeline = getEnvAsBool("FILTER_BY_SUCCEEDED_PIPELINE", cfg.FilterBySucceededPipeline)
 	cfg.FilterByPipelineWithoutWarnings = getEnvAsBool("FILTER_BY_PIPELINE_WITHOUT_WARNINGS", cfg.FilterByPipelineWithoutWarnings)
 	cfg.AddComment = getEnvAsBool("ADD_COMMENT", cfg.AddComment)
@@ -85,7 +87,8 @@ func (c *Config) PrintConfig() {
 			"FilterByLabels":                  c.FilterByLabels,
 			"Labels":                          c.Labels,
 			"FilterByBranch":                  c.FilterByBranch,
-			"AllowedBranchRegex":              c.AllowedBranchRegex.String(),
+			"AllowedBranchRegex":              c.AllowedBranchRegex,
+			"AllowedBranchRegexCompiled":      c.AllowedBranchRegexCompiled,
 			"FilterBySucceededPipeline":       c.FilterBySucceededPipeline,
 			"FilterByPipelineWithoutWarnings": c.FilterByPipelineWithoutWarnings,
 			"AddComment":                      c.AddComment,
@@ -136,6 +139,14 @@ func getEnvAsSlice(key, defaultValue string) []string {
 }
 
 func mustCompileRegex(pattern string) *regexp.Regexp {
+	if !strings.HasPrefix(pattern, "^") {
+		pattern = "^" + pattern
+	}
+
+	if !strings.HasSuffix(pattern, "$") {
+		pattern += "$"
+	}
+
 	re, err := regexp.Compile(pattern)
 	if err != nil {
 		logrus.Fatalf("Invalid regex pattern: %v", err)
