@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/xMoelletschi/renoglaab/compare/v1.0.0...v1.0.1) (2025-02-24)
+
+
+### Bug Fixes
+
+* Update config to push Docker image as 'latest' on tags ([#6](https://github.com/xMoelletschi/renoglaab/issues/6)) ([8b114ba](https://github.com/xMoelletschi/renoglaab/commit/8b114ba06607e25128cd92a1b9b14e3d9f7f45e2))
+
 # 1.0.0 (2025-02-23)
 
 
