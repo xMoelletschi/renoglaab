@@ -75,9 +75,7 @@ jobs:
       - run:
           name: Push Docker image as 'latest'
           command: |
-            docker tag ghcr.io/xmoelletschi/renoglaab:${CIRCLE_SHA1} ghcr.io/xmoelletschi/renoglaab:latest
             docker push ghcr.io/xmoelletschi/renoglaab:${CIRCLE_SHA1}
-            docker push ghcr.io/xmoelletschi/renoglaab:latest
 
   # Job to run semantic release
   semantic-release:
@@ -102,7 +100,9 @@ jobs:
       - run:
           name: Push Docker image with Tag
           command: |
+            docker tag ghcr.io/xmoelletschi/renoglaab:${CIRCLE_TAG} ghcr.io/xmoelletschi/renoglaab:latest
             docker push ghcr.io/xmoelletschi/renoglaab:${CIRCLE_TAG}
+            docker push ghcr.io/xmoelletschi/renoglaab:latest
 
 workflows:
   # Workflow for Pull Requests: Runs Tests & Linting
