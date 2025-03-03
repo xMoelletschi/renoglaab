@@ -17,9 +17,9 @@ type MockGitLabClient struct {
 	mock.Mock
 }
 
-func (m *MockGitLabClient) ListProjectMergeRequests(repo string, opts *gitlab.ListProjectMergeRequestsOptions) ([]*gitlab.MergeRequest, *gitlab.Response, error) {
+func (m *MockGitLabClient) ListProjectMergeRequests(repo string, opts *gitlab.ListProjectMergeRequestsOptions) ([]*gitlab.BasicMergeRequest, *gitlab.Response, error) {
 	args := m.Called(repo, opts)
-	mrs, ok := args.Get(0).([]*gitlab.MergeRequest)
+	mrs, ok := args.Get(0).([]*gitlab.BasicMergeRequest)
 
 	if !ok {
 		return nil, nil, errors.New("type assertion to []*gitlab.MergeRequest failed")
@@ -64,7 +64,7 @@ func TestListProjectMergeRequests(t *testing.T) {
 
 	tests := []struct {
 		name      string
-		mrs       []*gitlab.MergeRequest
+		mrs       []*gitlab.BasicMergeRequest
 		pipelines []*gitlab.PipelineInfo
 		pipeline  *gitlab.Pipeline
 		expectIDs []int
@@ -74,7 +74,7 @@ func TestListProjectMergeRequests(t *testing.T) {
 	}{
 		{
 			name: "Valid MR and successful pipeline",
-			mrs: []*gitlab.MergeRequest{
+			mrs: []*gitlab.BasicMergeRequest{
 				{IID: 1, SourceBranch: "feature/branch1", Title: "Test MR"},
 			},
 			pipelines: []*gitlab.PipelineInfo{{ID: 100}},
@@ -83,8 +83,8 @@ func TestListProjectMergeRequests(t *testing.T) {
 		},
 		{
 			name: "MR with failing pipeline",
-			mrs: []*gitlab.MergeRequest{
-				{IID: 2, SourceBranch: "feature/branch2", Title: "Test MR 2", Pipeline: &gitlab.PipelineInfo{Status: "failed"}},
+			mrs: []*gitlab.BasicMergeRequest{
+				{IID: 2, SourceBranch: "feature/branch2", Title: "Test MR 2"},
 			},
 			pipelines: []*gitlab.PipelineInfo{{ID: 102}},
 			pipeline:  &gitlab.Pipeline{Status: "failed", DetailedStatus: &gitlab.DetailedStatus{Icon: "failed"}},
@@ -92,7 +92,7 @@ func TestListProjectMergeRequests(t *testing.T) {
 		},
 		{
 			name: "MR with no pipelines",
-			mrs: []*gitlab.MergeRequest{
+			mrs: []*gitlab.BasicMergeRequest{
 				{IID: 3, SourceBranch: "feature/branch3", Title: "Test MR 3"},
 			},
 			pipelines: []*gitlab.PipelineInfo{},
@@ -100,7 +100,7 @@ func TestListProjectMergeRequests(t *testing.T) {
 		},
 		{
 			name: "MR with a branch that does not match regex",
-			mrs: []*gitlab.MergeRequest{
+			mrs: []*gitlab.BasicMergeRequest{
 				{IID: 4, SourceBranch: "hotfix/branch4", Title: "Hotfix MR"},
 			},
 			expectIDs: nil,
@@ -113,7 +113,7 @@ func TestListProjectMergeRequests(t *testing.T) {
 		},
 		{
 			name: "Error listing pipelines",
-			mrs: []*gitlab.MergeRequest{
+			mrs: []*gitlab.BasicMergeRequest{
 				{IID: 5, SourceBranch: "feature/branch5", Title: "Test MR 5"},
 			},
 			pipelines: nil,
@@ -122,7 +122,7 @@ func TestListProjectMergeRequests(t *testing.T) {
 		},
 		{
 			name: "Error getting pipeline details",
-			mrs: []*gitlab.MergeRequest{
+			mrs: []*gitlab.BasicMergeRequest{
 				{IID: 6, SourceBranch: "feature/branch6", Title: "Test MR 6"},
 			},
 			pipelines: []*gitlab.PipelineInfo{{ID: 103}},

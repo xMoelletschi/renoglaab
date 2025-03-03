@@ -42,7 +42,7 @@ func listProjectMergeRequests(config config.Config, repo string, client gl.Clien
 	return mrIIDs
 }
 
-func shouldProcessMR(repo string, mr *gitlab.MergeRequest, config config.Config, client gl.Client) bool {
+func shouldProcessMR(repo string, mr *gitlab.BasicMergeRequest, config config.Config, client gl.Client) bool {
 	logrus.WithFields(logrus.Fields{
 		"repository": repo, "mr_id": mr.IID, "branch": mr.SourceBranch, "title": mr.Title,
 	}).Debug("Checking")

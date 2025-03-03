@@ -17,7 +17,7 @@ type ClientWrapper struct {
 type Client interface {
 	ListProjectMergeRequests(
 		repo string, opts *gitlab.ListProjectMergeRequestsOptions,
-	) ([]*gitlab.MergeRequest, *gitlab.Response, error)
+	) ([]*gitlab.BasicMergeRequest, *gitlab.Response, error)
 	ListProjectPipelines(
 		repo string, opts *gitlab.ListProjectPipelinesOptions,
 	) ([]*gitlab.PipelineInfo, *gitlab.Response, error)
@@ -29,7 +29,7 @@ type Client interface {
 // ListProjectMergeRequests fetches the merge requests for a given repository.
 func (w *ClientWrapper) ListProjectMergeRequests(
 	repo string, opts *gitlab.ListProjectMergeRequestsOptions,
-) ([]*gitlab.MergeRequest, *gitlab.Response, error) {
+) ([]*gitlab.BasicMergeRequest, *gitlab.Response, error) {
 	logrus.WithFields(logrus.Fields{
 		"repo": repo,
 	}).Debug("Fetching merge requests")
