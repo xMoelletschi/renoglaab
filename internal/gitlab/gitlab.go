@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/sirupsen/logrus"
+	"github.com/xMoelletschi/renoglaab/internal/config"
 )
 
 // Define static errors.
@@ -16,8 +17,39 @@ var (
 	ErrNoRepositoriesFound = errors.New("no repositories found")
 )
 
-// ExtractRepositories parses the config.js file and extracts the repositories array.
-func ExtractRepositories(configPath string) ([]string, error) {
+func GetRepositories(cfg *config.Config) ([]string, error) {
+	if cfg.ExtractRepositoriesFromFile {
+		return ExtractFromFile(cfg.ConfigPath)
+	}
+
+	return ExtractFromEnv()
+}
+
+// ExtractFromEnv parses the RENOVATE_EXTRA_FLAGS environment variable and extracts repository names.
+func ExtractFromEnv() ([]string, error) {
+	extraFlags := os.Getenv("RENOVATE_EXTRA_FLAGS")
+	if extraFlags == "" {
+		return nil, ErrNoRepositoriesFound
+	}
+
+	var repositories []string
+
+	flags := strings.Split(extraFlags, " ")
+	for _, flag := range flags {
+		if !strings.HasPrefix(flag, "--") {
+			repositories = append(repositories, flag)
+		}
+	}
+
+	if len(repositories) == 0 {
+		return nil, ErrNoRepositoriesFound
+	}
+
+	return repositories, nil
+}
+
+// ExtractFromFile parses the config.js file and extracts the repositories array.
+func ExtractFromFile(configPath string) ([]string, error) {
 	file, err := os.Open(configPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open config file %s: %w", configPath, err)
