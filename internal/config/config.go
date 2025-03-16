@@ -10,6 +10,7 @@ import (
 )
 
 type Config struct {
+	ExtractRepositoriesFromFile     bool
 	ConfigPath                      string
 	LogLevel                        logrus.Level
 	GitLabAPIToken                  string
@@ -31,6 +32,7 @@ type Config struct {
 // getDefaultConfig returns the default configuration values.
 func getDefaultConfig() Config {
 	return Config{
+		ExtractRepositoriesFromFile:     false,
 		ConfigPath:                      "$CI_PROJECT_DIR/config.js",
 		LogLevel:                        logrus.InfoLevel,
 		GitLabURL:                       "https://gitlab.com",
@@ -51,6 +53,7 @@ func getDefaultConfig() Config {
 func NewConfig() *Config {
 	cfg := getDefaultConfig() // Use default values
 
+	cfg.ExtractRepositoriesFromFile = getEnvAsBool("EXTRACT_FROM_FILE", cfg.ExtractRepositoriesFromFile)
 	cfg.ConfigPath = os.ExpandEnv(getEnv("CONFIG_PATH", cfg.ConfigPath))
 	cfg.LogLevel = mustParseLogLevel(getEnv("LOG_LEVEL", cfg.LogLevel.String()))
 	cfg.GitLabAPIToken = getEnv("GITLAB_API_TOKEN", "")
@@ -79,6 +82,7 @@ func NewConfig() *Config {
 func (c *Config) PrintConfig() {
 	if logrus.GetLevel() == logrus.DebugLevel {
 		logrus.WithFields(logrus.Fields{
+			"ExtractRepositoriesFromFile":     c.ExtractRepositoriesFromFile,
 			"ConfigPath":                      c.ConfigPath,
 			"LogLevel":                        c.LogLevel.String(),
 			"GitLabURL":                       c.GitLabURL,

@@ -1,6 +1,7 @@
 package app
 
 import (
+	"errors"
 	"sync"
 
 	"github.com/sirupsen/logrus"
@@ -8,6 +9,8 @@ import (
 	gl "github.com/xMoelletschi/renoglaab/internal/gitlab"
 	"github.com/xMoelletschi/renoglaab/internal/mergerequests"
 )
+
+var errFailedToExtractRepositories = errors.New("failed to extract repositories")
 
 const workerCount = 5
 
@@ -20,9 +23,9 @@ const workerCount = 5
 func Run() error {
 	cfg := config.NewConfig()
 
-	repositories, err := gl.ExtractRepositories(cfg.ConfigPath)
+	repositories, err := gl.GetRepositories(cfg)
 	if err != nil {
-		logrus.WithError(err).Errorf("Failed to extract repositories from config path: %s", cfg.ConfigPath)
+		logrus.WithError(err).Error(errFailedToExtractRepositories.Error())
 
 		return err
 	}

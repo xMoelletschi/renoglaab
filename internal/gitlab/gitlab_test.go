@@ -10,7 +10,55 @@ import (
 	gl "github.com/xMoelletschi/renoglaab/internal/gitlab"
 )
 
-func TestExtractRepositories(t *testing.T) {
+func TestExtractFromEnv(t *testing.T) {
+	tests := []struct {
+		name        string
+		envValue    string
+		expected    []string
+		expectError bool
+	}{
+		{
+			name:        "Valid repositories",
+			envValue:    "repo1 repo2 repo3",
+			expected:    []string{"repo1", "repo2", "repo3"},
+			expectError: false,
+		},
+		{
+			name:        "Repositories with flags",
+			envValue:    "repo1 --autodiscover=true repo2 --autodiscover-filter=repo3",
+			expected:    []string{"repo1", "repo2"},
+			expectError: false,
+		},
+		{
+			name:        "Only flags",
+			envValue:    "--autodiscover=true --autodiscover-filter=repo3",
+			expected:    nil,
+			expectError: true,
+		},
+		{
+			name:        "Empty environment variable",
+			envValue:    "",
+			expected:    nil,
+			expectError: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Setenv("RENOVATE_EXTRA_FLAGS", tt.envValue)
+
+			repositories, err := gl.ExtractFromEnv()
+
+			if tt.expectError {
+				assert.Error(t, err)
+			} else {
+				require.NoError(t, err)
+				assert.Equal(t, tt.expected, repositories)
+			}
+		})
+	}
+}
+
+func TestExtractFromFile(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
@@ -95,7 +143,7 @@ func TestExtractRepositories(t *testing.T) {
 			err = tmpfile.Close()
 			require.NoError(t, err)
 
-			repositories, err := gl.ExtractRepositories(tmpfile.Name())
+			repositories, err := gl.ExtractFromFile(tmpfile.Name())
 
 			if tt.expectError {
 				assert.Error(t, err)
