@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/xMoelletschi/renoglaab/compare/v1.0.2...v1.1.0) (2025-03-16)
+
+
+### Features
+
+* add repository extraction from environment variables and refactor config handling ([7775548](https://github.com/xMoelletschi/renoglaab/commit/77755485b2d3f0b5d9acb60ad06dcad618879b14))
+
 ## [1.0.2](https://github.com/xMoelletschi/renoglaab/compare/v1.0.1...v1.0.2) (2025-03-03)
 
 
