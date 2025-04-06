@@ -116,7 +116,7 @@ func processRepositoryLine(line string, repositories *[]string, inRepositoriesSe
 
 // isRepositoriesArrayStart checks if a line indicates the start of the repositories array.
 func isRepositoriesArrayStart(line string) bool {
-	return strings.HasPrefix(line, "repositories:")
+	return strings.Contains(line, "repositories") && strings.Contains(line, "[")
 }
 
 // isRepositoriesArrayEnd checks if the line marks the end of the repositories array.

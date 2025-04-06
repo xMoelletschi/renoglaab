@@ -82,6 +82,20 @@ func TestExtractFromFile(t *testing.T) {
 			expectError: false,
 		},
 		{
+			name: "Valid config with quotes",
+			configData: `
+			{
+                "repositories": [
+                        "group/project1",
+                        "group/project2",
+                        "group/subgroup/project3",
+                    ]
+                }
+            `,
+			expected:    []string{"group/project1", "group/project2", "group/subgroup/project3"},
+			expectError: false,
+		},
+		{
 			name: "Empty repositories section",
 			configData: `
                 module.exports = {
