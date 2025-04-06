@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/xMoelletschi/renoglaab/compare/v1.1.2...v1.1.3) (2025-04-06)
+
+
+### Bug Fixes
+
+* improve repository array detection logic and add test ([ced6588](https://github.com/xMoelletschi/renoglaab/commit/ced658831e1a382ccfd001271c730769a1766321))
+
 ## [1.1.2](https://github.com/xMoelletschi/renoglaab/compare/v1.1.1...v1.1.2) (2025-04-06)
 
 
