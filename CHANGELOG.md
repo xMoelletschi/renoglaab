@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/xMoelletschi/renoglaab/compare/v1.1.1...v1.1.2) (2025-04-06)
+
+
+### Bug Fixes
+
+* **deps:** update module gitlab.com/gitlab-org/api/client-go to v0.127.0 ([60fb7e4](https://github.com/xMoelletschi/renoglaab/commit/60fb7e496afc31ae14bc50227fa58fddfa252b1e))
+
 ## [1.1.1](https://github.com/xMoelletschi/renoglaab/compare/v1.1.0...v1.1.1) (2025-03-20)
 
 
