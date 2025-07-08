@@ -1,3 +1,10 @@
+## [1.1.5](https://github.com/xMoelletschi/renoglaab/compare/v1.1.4...v1.1.5) (2025-07-08)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([8fe68ba](https://github.com/xMoelletschi/renoglaab/commit/8fe68ba2a174b26ba391dd58a3c710cc5a711f84))
+
 ## [1.1.4](https://github.com/xMoelletschi/renoglaab/compare/v1.1.3...v1.1.4) (2025-06-03)
 
 
