@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM golang:1.24@sha256:81bf5927dc91aefb42e2bc3a5abdbe9bb3bae8ba8b107e2a4cf43ce3402534c6 AS builder
+FROM golang:1.24@sha256:87916acb3242b6259a26deaa7953bdc6a3a6762a28d340e4f1448e7b5c27c009 AS builder
 WORKDIR /build
 COPY go.mod go.sum ./
 RUN go mod download
