@@ -130,9 +130,18 @@ workflows:
               only: master
             tags:
               ignore: /.*/
-      - semantic-release:
+      - hold-for-approval:
+          type: approval
           requires:
             - docker-build-main
+          filters:
+            branches:
+              only: master
+            tags:
+              ignore: /.*/
+      - semantic-release:
+          requires:
+            - hold-for-approval
           filters:
             branches:
               only: master
