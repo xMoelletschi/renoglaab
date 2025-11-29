@@ -39,7 +39,7 @@ func (m *MockGitLabClient) ListProjectPipelines(repo string, opts *gitlab.ListPr
 	return pipelines, nil, args.Error(1)
 }
 
-func (m *MockGitLabClient) GetPipeline(repo string, pipelineID int) (*gitlab.Pipeline, *gitlab.Response, error) {
+func (m *MockGitLabClient) GetPipeline(repo string, pipelineID int64) (*gitlab.Pipeline, *gitlab.Response, error) {
 	args := m.Called(repo, pipelineID)
 	pipeline, ok := args.Get(0).(*gitlab.Pipeline)
 
@@ -67,7 +67,7 @@ func TestListProjectMergeRequests(t *testing.T) {
 		mrs       []*gitlab.BasicMergeRequest
 		pipelines []*gitlab.PipelineInfo
 		pipeline  *gitlab.Pipeline
-		expectIDs []int
+		expectIDs []int64
 		listErr   error
 		pipeErr   error
 		getErr    error
@@ -79,7 +79,7 @@ func TestListProjectMergeRequests(t *testing.T) {
 			},
 			pipelines: []*gitlab.PipelineInfo{{ID: 100}},
 			pipeline:  &gitlab.Pipeline{Status: "success", DetailedStatus: &gitlab.DetailedStatus{Icon: "status_success"}},
-			expectIDs: []int{1},
+			expectIDs: []int64{1},
 		},
 		{
 			name: "MR with failing pipeline",

@@ -10,7 +10,7 @@ import (
 const stateOpen string = "opened"
 
 // listProjectMergeRequests fetches MRs and filters by branch regex and pipeline status.
-func listProjectMergeRequests(config config.Config, repo string, client gl.Client) []int {
+func listProjectMergeRequests(config config.Config, repo string, client gl.Client) []int64 {
 	logrus.WithField("repository", repo).Debug("Listing merge requests")
 
 	options := &gitlab.ListProjectMergeRequestsOptions{
@@ -31,7 +31,7 @@ func listProjectMergeRequests(config config.Config, repo string, client gl.Clien
 		logrus.WithError(err).WithField("repository", repo).Error("Failed to list MRs")
 	}
 
-	var mrIIDs []int
+	var mrIIDs []int64
 
 	for _, mr := range mrs {
 		if shouldProcessMR(repo, mr, config, client) {
