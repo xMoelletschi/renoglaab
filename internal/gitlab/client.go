@@ -22,7 +22,7 @@ type Client interface {
 		repo string, opts *gitlab.ListProjectPipelinesOptions,
 	) ([]*gitlab.PipelineInfo, *gitlab.Response, error)
 	GetPipeline(
-		repo string, pipelineID int,
+		repo string, pipelineID int64,
 	) (*gitlab.Pipeline, *gitlab.Response, error)
 }
 
@@ -50,7 +50,7 @@ func (w *ClientWrapper) ListProjectPipelines(
 
 // GetPipeline fetches a specific pipeline by its ID for a given repository.
 func (w *ClientWrapper) GetPipeline(
-	repo string, pipelineID int,
+	repo string, pipelineID int64,
 ) (*gitlab.Pipeline, *gitlab.Response, error) {
 	logrus.WithFields(logrus.Fields{
 		"repo":       repo,

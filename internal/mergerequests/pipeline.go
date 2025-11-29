@@ -52,7 +52,7 @@ func listPipelines(client gl.Client, repo, branch string) ([]*gitlab.PipelineInf
 	return pipelines, nil
 }
 
-func getPipeline(client gl.Client, repo string, pipelineID int) (*gitlab.Pipeline, error) {
+func getPipeline(client gl.Client, repo string, pipelineID int64) (*gitlab.Pipeline, error) {
 	pipeline, _, err := client.GetPipeline(repo, pipelineID)
 	if err != nil {
 		logrus.WithError(err).WithFields(logrus.Fields{
@@ -66,7 +66,7 @@ func getPipeline(client gl.Client, repo string, pipelineID int) (*gitlab.Pipelin
 	return pipeline, nil
 }
 
-func checkPipelineStatus(config config.Config, repo string, pipelineID int, pipeline *gitlab.Pipeline) bool {
+func checkPipelineStatus(config config.Config, repo string, pipelineID int64, pipeline *gitlab.Pipeline) bool {
 	if pipeline.Status != "success" {
 		logrus.WithFields(logrus.Fields{
 			"repository":      repo,

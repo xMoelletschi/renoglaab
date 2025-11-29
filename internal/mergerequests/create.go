@@ -2,7 +2,7 @@ package mergerequests
 
 import gitlab "gitlab.com/gitlab-org/api/client-go"
 
-func createMergeRequestNote(repo string, mr int, comment string, client *gitlab.Client) error {
+func createMergeRequestNote(repo string, mr int64, comment string, client *gitlab.Client) error {
 	noteOptions := &gitlab.CreateMergeRequestNoteOptions{
 		Body: gitlab.Ptr(comment),
 	}
