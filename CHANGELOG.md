@@ -1,3 +1,12 @@
+## [1.1.6](https://github.com/xMoelletschi/renoglaab/compare/v1.1.5...v1.1.6) (2025-11-30)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([173f05f](https://github.com/xMoelletschi/renoglaab/commit/173f05fbbdf5f35177b5f73bf148cbb4b992de7c))
+* **deps:** update module gitlab.com/gitlab-org/api/client-go to v1 ([a78d174](https://github.com/xMoelletschi/renoglaab/commit/a78d174bdcfa0955e13963035aa1adc413027c09))
+* migrate int to int64 ([3755b19](https://github.com/xMoelletschi/renoglaab/commit/3755b19a9baceabdb2e13ab83c1014909f40e93d))
+
 ## [1.1.5](https://github.com/xMoelletschi/renoglaab/compare/v1.1.4...v1.1.5) (2025-07-08)
 
 
