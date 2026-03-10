@@ -2,7 +2,7 @@ package gitlab
 
 import (
 	"github.com/sirupsen/logrus"
-	gitlab "gitlab.com/gitlab-org/api/client-go"
+	gitlab "gitlab.com/gitlab-org/api/client-go/v2"
 )
 
 // Ensure ClientWrapper implements Client interface.

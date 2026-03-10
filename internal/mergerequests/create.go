@@ -1,6 +1,6 @@
 package mergerequests
 
-import gitlab "gitlab.com/gitlab-org/api/client-go"
+import gitlab "gitlab.com/gitlab-org/api/client-go/v2"
 
 func createMergeRequestNote(repo string, mr int64, comment string, client *gitlab.Client) error {
 	noteOptions := &gitlab.CreateMergeRequestNoteOptions{
