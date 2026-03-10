@@ -1,3 +1,13 @@
+## [1.1.8](https://github.com/xMoelletschi/renoglaab/compare/v1.1.7...v1.1.8) (2026-03-10)
+
+
+### Bug Fixes
+
+* **deps:** migrate imports from client-go v1 to v2 ([4de066a](https://github.com/xMoelletschi/renoglaab/commit/4de066a8b004a26da6cf1dbe674f89cc57aba441))
+* **deps:** update all non-major dependencies ([3a17f73](https://github.com/xMoelletschi/renoglaab/commit/3a17f73a272ed1d46f51afafd762c218ecbbbc40))
+* **deps:** update module gitlab.com/gitlab-org/api/client-go to v2 ([6a4a413](https://github.com/xMoelletschi/renoglaab/commit/6a4a413192cb67476e7124e591c9ce0072522212))
+* group digest updates with all non-major dependencies ([1768ab9](https://github.com/xMoelletschi/renoglaab/commit/1768ab9693e87e44605196e851862312113d26eb))
+
 ## [1.1.7](https://github.com/xMoelletschi/renoglaab/compare/v1.1.6...v1.1.7) (2026-01-12)
 
 
