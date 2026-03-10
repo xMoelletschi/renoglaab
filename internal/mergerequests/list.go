@@ -4,7 +4,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/xMoelletschi/renoglaab/internal/config"
 	gl "github.com/xMoelletschi/renoglaab/internal/gitlab"
-	gitlab "gitlab.com/gitlab-org/api/client-go"
+	gitlab "gitlab.com/gitlab-org/api/client-go/v2"
 )
 
 const stateOpen string = "opened"
