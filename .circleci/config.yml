@@ -7,7 +7,7 @@ orbs:
 executors:
   go-container:
     docker:
-      - image: cimg/go:1.25
+      - image: cimg/go:1.26
   docker-container:
     docker:
       - image: cimg/base:stable
